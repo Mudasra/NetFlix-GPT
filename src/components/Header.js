@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <div
   className="
-    absolute flex w-full top-0 justify-between items-center z-10
+    absolute flex w-full top-0 justify-between items-center z-20
     px-4 sm:px-8 md:px-16 lg:px-32 py-4
     bg-gradient-to-b from-black
   "
@@ -22,6 +22,7 @@ const Header = () => {
       bg-red-600 hover:bg-red-700 rounded
       transition-colors duration-300 ease-in-out
     "
+    
   >
     Sign in
   </button>

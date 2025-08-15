@@ -6,32 +6,17 @@ export const CheckValidData = (name , email , password) => {
     const errors = {};
 
     if(!isNameValid) {
-        errors.name = (
-            (
-        <p><i className="fa-solid fa-circle-xmark pr-1 "></i>
-        Name must contain only letters.</p>
-        )
-    )
+        errors.name = "Name must contain only letters."
     }  
 
     if(!isEmailValid) {
-        errors.email = (
-            (
-        <p><i className="fa-solid fa-circle-xmark "></i>
-       Please enter a vallid email address.</p>
-        )
-    )
+        errors.email = "Please enter a vallid email address.";
     }      
      
 
     if(!isPasswordValid){
-        errors.password = (
-            <p key={password}>
-            <i className="fa-solid fa-circle-xmark pr-1 "></i> 
-            Please enter a valid password.</p> 
-       
-        )
-        
+        errors.password = "Please enter a valid password."
+ 
     } 
 
     return Object.keys(errors).length === 0 ? null : errors;

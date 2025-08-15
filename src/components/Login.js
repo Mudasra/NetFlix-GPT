@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isSignInForm, setisSignInForm] = useState(true);
@@ -16,6 +17,10 @@ const Login = () => {
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
+  const nevigate = useNavigate();
+
+  // const [errorMessage, seterrorMessage] = useState({});
+  const [firebaseError, setFirebaseError] = useState("");
 
   const handleButtonClick = () => {
     //Validate the form data
@@ -37,11 +42,12 @@ const Login = () => {
           // Signed up
           const user = userCredential.user;
           console.log(user);
+          nevigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          seterrorMessage(errorCode + "-" + errorMessage);
+          setFirebaseError(errorCode + "-" + errorMessage);
         });
     } else {
       // sgin in logic
@@ -49,29 +55,43 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log("user signed in" , user);
-          // console.log("Validation result:", message);
-
+          console.log("user signed in", user);
+          setFirebaseError("");
+          nevigate('/')
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          seterrorMessage(errorCode + "-" + errorMessage);
+          console.log("FIREBASE ERROR:", error.code, error.message);
+          setFirebaseError(errorCode + "-" + errorMessage);
         });
     }
   };
+
+
+
 
   const [errorMessage, seterrorMessage] = useState({});
   return (
     <div>
       <Header />
-      <div className="absolute  w-screen h-screen">
+      {/* <div className="absolute  w-screen h-screen">
         <img
           className="w-full h-full object-cover t-0 l-0 z-0"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/a927b1ee-784d-494a-aa80-cf7a062d2523/web/PK-en-20250714-TRIFECTA-perspective_3ea31bb5-14e1-41fe-997f-52b7ec8f28e4_large.jpg"
+          src="https://netmirror.app/img/home-bg.jpg"
           alt=""
         />
-      </div>
+      </div> */}
+     <div className="absolute w-screen h-screen">
+  <img
+    className="w-full h-full object-cover t-0 l-0 z-0"
+    src="https://netmirror.app/img/home-bg.jpg"
+    alt=""
+  />
+  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-transparent pointer-events-none to-black/95 z-10"></div>
+</div>
+
+
       <form
         onSubmit={(e) => e.preventDefault()}
         autoComplete="on"
@@ -85,10 +105,10 @@ const Login = () => {
 
         {!isSignInForm && (
           <div className="my-6">
-            
             {errorMessage.name && (
-              <div className="text-red-500 text-xs">{errorMessage.name}</div>
+              <p className="text-red-500 text-xs"> {errorMessage.name}</p>
             )}
+
             <input
               ref={name}
               type="text"
@@ -101,9 +121,7 @@ const Login = () => {
 
         <div className="mb-6">
           {errorMessage.email && (
-            <div className="text-red-500 m-0 p-0 leading-tight text-xs">
-              {errorMessage.email}
-            </div>
+            <p className="text-red-500 text-xs"> {errorMessage.email}</p>
           )}
           <input
             ref={email}
@@ -116,7 +134,7 @@ const Login = () => {
 
         <div className="mb-4">
           {errorMessage.password && (
-            <div className="text-red-500 text-xs">{errorMessage.password}</div>
+            <p className="text-red-500 text-xs"> {errorMessage.password}</p>
           )}
           <input
             ref={password}
@@ -135,9 +153,10 @@ const Login = () => {
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
 
-
-
-{/* {errorMessage && <p className="text-red-500 text-sm pt-4">{errorMessage}</p>} */}
+        {firebaseError && (
+          <p className="text-red-500 text-sm pt-4">{firebaseError}</p>
+        )}
+        {/* {errorMessage && <p className="text-red-500 text-sm pt-4">{errorMessage}</p>} */}
 
         {/* <p className="text-red-500 text-sm pt-4 ">{errorMessage}</p> */}
 
