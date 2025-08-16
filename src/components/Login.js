@@ -4,9 +4,12 @@ import { CheckValidData } from "../utils/Validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlics";
 
 const Login = () => {
   const [isSignInForm, setisSignInForm] = useState(true);
@@ -17,9 +20,10 @@ const Login = () => {
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // const [errorMessage, seterrorMessage] = useState({});
+  const [errorMessage, seterrorMessage] = useState({});
   const [firebaseError, setFirebaseError] = useState("");
 
   const handleButtonClick = () => {
@@ -41,8 +45,26 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: nameValue,
+            photoURL: "https://example.com/jane-q-user/profile.jpg",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+                      dispatch(
+                        addUser({
+                          uid: uid,
+                          email: email,
+                          displayName: displayName,
+                          photoURL,
+                        })
+                      );
+            })
+            .catch((error) => {
+              seterrorMessage(message);
+            });
           console.log(user);
-          nevigate('/browse')
+          
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -57,7 +79,6 @@ const Login = () => {
           const user = userCredential.user;
           console.log("user signed in", user);
           setFirebaseError("");
-          nevigate('/')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -68,29 +89,17 @@ const Login = () => {
     }
   };
 
-
-
-
-  const [errorMessage, seterrorMessage] = useState({});
   return (
     <div>
       <Header />
-      {/* <div className="absolute  w-screen h-screen">
+      <div className="absolute w-screen h-screen">
         <img
           className="w-full h-full object-cover t-0 l-0 z-0"
           src="https://netmirror.app/img/home-bg.jpg"
           alt=""
         />
-      </div> */}
-     <div className="absolute w-screen h-screen">
-  <img
-    className="w-full h-full object-cover t-0 l-0 z-0"
-    src="https://netmirror.app/img/home-bg.jpg"
-    alt=""
-  />
-  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-transparent pointer-events-none to-black/95 z-10"></div>
-</div>
-
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-transparent pointer-events-none to-black/95 z-10"></div>
+      </div>
 
       <form
         onSubmit={(e) => e.preventDefault()}
@@ -185,3 +194,4 @@ const Login = () => {
 };
 
 export default Login;
+
