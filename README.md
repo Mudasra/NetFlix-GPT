@@ -16,7 +16,8 @@ created redux store with user slice
 Bugfix: sign up user displayname and profile picture update
 Bugfix: if the user is not signed in redirect / browse to the login page
 unsubscribed to the onauthstatechanged callback
-
+register for tmdb, create an app and access token 
+ get data from NOW  PLAYING MOVIES
 
  # Features
  login / sign up page
