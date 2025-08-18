@@ -63,7 +63,7 @@ const Login = () => {
             .catch((error) => {
               seterrorMessage(message);
             });
-          console.log(user);
+          // console.log(user);
           
         })
         .catch((error) => {
@@ -77,13 +77,13 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log("user signed in", user);
+          // console.log("user signed in", user);
           setFirebaseError("");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log("FIREBASE ERROR:", error.code, error.message);
+          // console.log("FIREBASE ERROR:", error.code, error.message);
           setFirebaseError(errorCode + "-" + errorMessage);
         });
     }
