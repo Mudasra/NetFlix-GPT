@@ -10,6 +10,7 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlics";
+import { BG_IMG } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setisSignInForm] = useState(true);
@@ -95,7 +96,7 @@ const Login = () => {
       <div className="absolute w-screen h-screen">
         <img
           className="w-full h-full object-cover t-0 l-0 z-0"
-          src="https://netmirror.app/img/home-bg.jpg"
+          src={BG_IMG}
           alt=""
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-transparent pointer-events-none to-black/95 z-10"></div>

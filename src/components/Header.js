@@ -4,23 +4,24 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlics";
-import { LOGO, USER_AVATAR } from "../utils/constants";
+import { LOGO, SUPPORTED_LANGUAGES, USER_AVATAR } from "../utils/constants";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import { changeLanguage } from "../utils/configSlice";
+import lang from "../utils/languageConstants";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(store => store.user);
+  const user = useSelector((store) => store.user);
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         navigate("/error");
       });
   };
 
-
-    useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
@@ -32,16 +33,26 @@ const Header = () => {
             photoURL,
           })
         );
-        navigate("/browse")
+        navigate("/browse");
       } else {
         dispatch(removeUser());
-        navigate("/")
+        navigate("/");
       }
     });
     // unsubscribe when component unmounts
     return () => unsubscribe();
   }, []);
 
+  const handleGptSearchCLick = () => {
+    dispatch(toggleGptSearchView());
+  };
+
+  const handleLanguageChange = (e) => {
+    // console.log(e.target.value)
+    dispatch(changeLanguage(e.target.value));
+  }
+
+  const langKey = useSelector((store) => store.config.lang);
 
   return (
     <div
@@ -51,53 +62,49 @@ const Header = () => {
     bg-gradient-to-b from-black
   "
     >
-      <img
-        className="w-28 sm:w-32 md:w-40 lg:w-44"
-        alt="logo"
-        src={LOGO}
-      />
+      <img className="w-28 sm:w-32 md:w-40 lg:w-44" alt="logo" src={LOGO} />
 
-      {user && <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-5">
-        <img
-          className="w-10 h-10 rounded"
-          alt="user profile"
-          // src={user?.photoURL}
-          src={USER_AVATAR}
-        />
+      {user && (
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+          <select onChange={handleLanguageChange} className="px-4 py-2 bg-neutral-900 text-white rounded-md border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-red-600">
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <option key={lang.identifier} value={lang.identifier}>
+                {lang.name}
+              </option>
+            ))}
+            
+          </select>
+          <button
+            onClick={handleGptSearchCLick}
+            className=" bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-md shadow-md transition duration-200"
+          >
+            {lang[langKey].search}
+          </button>
+          <img
+            className="w-10 h-10 rounded"
+            alt="user profile"
+            // src={user?.photoURL}
+            src={USER_AVATAR}
+          />
 
-        <button
-          className="
+          <button
+            className="
       px-3 sm:px-4 py-1 text-sm sm:text-base
       text-white font-semibold
       bg-red-600 hover:bg-red-700 rounded
       transition-colors duration-300 ease-in-out
     "
-          onClick={handleSignOut}
-        >
-          Sign out
-        </button>
-      </div>}
-
+            onClick={handleSignOut}
+          >
+            {lang[langKey].sign_out}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Header;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { auth } from "../utils/firebase";
@@ -220,4 +227,3 @@ export default Header;
 // };
 
 // export default Header;
-

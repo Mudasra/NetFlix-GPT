@@ -26,6 +26,12 @@
 -  updata store with trailer video data
 -  embeded the youtube video, make it autopaly - and mute
 -  used tailwind css
+- build the movie list 
+- build movie card 
+- found out tmdb image cdn
+- made the browse page 
+- create the use popular movies custom hook
+
  
 
  # Features
