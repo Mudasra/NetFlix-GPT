@@ -31,7 +31,10 @@
 - found out tmdb image cdn
 - made the browse page 
 - create the use popular movies custom hook
-
+- gpt search bar
+- added multi-lingual functionality
+- integrate gpt APIs
+- will get open AI key 
  
 
  # Features

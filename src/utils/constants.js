@@ -18,7 +18,7 @@ export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
 export const BG_IMG = "https://netmirror.app/img/home-bg.jpg";
 
 export const SUPPORTED_LANGUAGES = [
-  { identifier: "en", name: "English" },
-  { identifier: "urdu", name: "Urdu" },
-  { identifier: "korean", name: "Korean" },
+  { identifier: "en", name: "English", tmdbCode: "en-US" },
+  { identifier: "chinese", name: "Chinese", tmdbCode: "zh-CN" },
+  { identifier: "korean", name: "Korean", tmdbCode: "ko-KR" },
 ];
