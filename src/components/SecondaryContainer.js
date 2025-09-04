@@ -10,7 +10,7 @@ const SecondaryContainer = () => {
   
   return (
     <div className='bg-[#2a2a2a]'>
-      <div className='-mt-56 relative z-20'>
+      <div className='-mt-4 sm:-mt-20 md:-mt-16 lg:-mt-28  relative z-20'>
         <MovieList title= {lang[langKey].Now_Playing} movies={movies.nowPlayingMovies}/>
         <MovieList title= {lang[langKey].Top_Rated_Movies} movies={movies.TopRatedMovies}/>
         <MovieList title= {lang[langKey].Popular_Movies} movies={movies.PopularMovies}/>
@@ -21,4 +21,16 @@ const SecondaryContainer = () => {
   )
 }
 
-export default SecondaryContainer
+export default SecondaryContainer;
+
+
+
+
+
+
+
+
+
+
+
+

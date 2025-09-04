@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { API_OPTIONS , BG_IMG } from "../utils/constants";
+import { API_OPTIONS, BG_IMG } from "../utils/constants";
 import lang from "../utils/languageConstants";
+import MovieModal from "./MovieModal";
+import MovieCards from "./MovieCards";
 
 const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
@@ -13,7 +15,7 @@ const GptSearchBar = () => {
 
   const handleGPTSearch = async () => {
     const searchValue = searchText.current.value.trim();
-    setQuery(searchValue); // update query state
+    setQuery(searchValue);
     if (!searchValue) return;
 
     setLoading(true);
@@ -24,7 +26,6 @@ const GptSearchBar = () => {
         )}&include_adult=false&language=en-US&page=1`,
         API_OPTIONS
       );
-
       const data = await response.json();
       setMovies(data.results || []);
     } catch (error) {
@@ -36,7 +37,7 @@ const GptSearchBar = () => {
 
   return (
     <div
-      className={`flex flex-col items-center mt-12 w-full min-h-screen transition-all duration-500 p-4 sm:p-6 md:p-8 lg:p-12 ${
+      className={`flex flex-col items-center mt-12 w-full min-h-screen transition-all duration-500 p-4 ${
         query ? "bg-gray-900" : ""
       }`}
       style={
@@ -49,7 +50,6 @@ const GptSearchBar = () => {
           : {}
       }
     >
-      {/* Search Bar */}
       <form
         onSubmit={(e) => e.preventDefault()}
         className="bg-black bg-opacity-80 p-4 sm:p-6 rounded-xl flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 w-full max-w-2xl"
@@ -70,69 +70,35 @@ const GptSearchBar = () => {
         </button>
       </form>
 
-      {/* Loading Indicator */}
-      {loading && <p className="text-white mt-4 text-sm sm:text-base">Loading movies...</p>}
+      {loading && (
+        <p className="text-white mt-4 text-sm sm:text-base">
+          Loading movies...
+        </p>
+      )}
 
-      {/* Movie Results */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 w-full max-w-6xl transition-all duration-500">
-        {movies.map((movie) => (
-          <div
-            key={movie.id}
-            onClick={() => setSelectedMovie(movie)}
-            className="bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer transform hover:scale-105 transition-all duration-300"
-          >
-            {movie.poster_path ? (
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                className="w-full h-64 sm:h-72 md:h-80 object-cover"
-              />
-            ) : (
-              <div className="w-full h-64 sm:h-72 md:h-80 flex items-center justify-center bg-gray-700 text-white text-sm sm:text-base">
-                No Image
-              </div>
-            )}
-            <div className="p-3 sm:p-4">
-              <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg">{movie.title}</h3>
-              <p className="text-gray-400 text-xs sm:text-sm mt-1">{movie.release_date}</p>
-            </div>
-          </div>
-        ))}
+      {/* Movies Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 w-full max-w-6xl">
+        {movies
+          .filter((movie) => movie.poster_path || movie.backdrop_path)
+          .map((movie) => (
+            <MovieCards
+              key={movie.id}
+              posterPath={movie.poster_path || movie.backdrop_path}
+              movie={movie}
+              onClick={setSelectedMovie}
+            />
+          ))}
       </div>
 
-      {/* Modal for selected movie */}
+      {/* Modal */}
       {selectedMovie && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 sm:p-6">
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 md:p-8 max-w-xl w-full relative overflow-auto max-h-[90vh]">
-            <button
-              onClick={() => setSelectedMovie(null)}
-              className="absolute top-4 right-4 text-white text-2xl font-bold"
-            >
-              &times;
-            </button>
-            {selectedMovie.poster_path && (
-              <img
-                src={`https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}`}
-                alt={selectedMovie.title}
-                className="w-full h-72 sm:h-80 md:h-96 object-cover rounded-lg mb-4"
-              />
-            )}
-            <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold mb-2">
-              {selectedMovie.title}
-            </h2>
-            <p className="text-gray-400 mb-1 sm:mb-2 text-sm sm:text-base">
-              Release Date: {selectedMovie.release_date}
-            </p>
-            <p className="text-gray-300 mb-2 text-sm sm:text-base">
-              Rating: {selectedMovie.vote_average} / 10
-            </p>
-            <p className="text-gray-300 text-sm sm:text-base">{selectedMovie.overview}</p>
-          </div>
-        </div>
+        <MovieModal
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
       )}
     </div>
   );
 };
 
 export default GptSearchBar;
-
