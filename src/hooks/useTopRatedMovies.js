@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { API_OPTIONS, SUPPORTED_LANGUAGES } from '../utils/constants'
 
 const useTopRatedMovies = () => {
-    //  fetch data from tmdb api an update the store
+    //  fetch data from tmdb api and update the store
   const dispatch = useDispatch();
     const langKey = useSelector((store) => store.config.lang);
 const langCode = SUPPORTED_LANGUAGES.find(l => l.identifier === langKey)?.tmdbCode || "en-US";
