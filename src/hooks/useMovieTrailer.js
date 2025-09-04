@@ -3,12 +3,11 @@ import { addTrailerVideo } from "../utils/movieSlice";
 import { API_OPTIONS } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 
-const useMovieTrailer = ({movieId}) => {
+const useMovieTrailer = (movieId) => {
   const dispatch = useDispatch();
   
-
   const trailerVideo = useSelector(
-    (store) => store.movies.nowPlayingMovies
+    (store) => store.movies.trailerVideo
   );
 
   // fetch trailer video from the api, it will need movie id and updating the trailer video data
