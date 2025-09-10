@@ -76,7 +76,6 @@ const GptSearchBar = () => {
         </p>
       )}
 
-      {/* Movies Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 w-full max-w-6xl">
         {movies
           .filter((movie) => movie.poster_path || movie.backdrop_path)
@@ -90,7 +89,6 @@ const GptSearchBar = () => {
           ))}
       </div>
 
-      {/* Modal */}
       {selectedMovie && (
         <MovieModal
           movie={selectedMovie}
